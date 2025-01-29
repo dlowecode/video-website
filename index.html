@@ -4,97 +4,124 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vimeo Video Gallery</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        primary: "#7d3cff",
-                        dark: "#1a1a1a",
-                    }
-                }
-            }
-        };
-    </script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            text-align: center;
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 10px;
+        }
+
+        .video-container {
+            position: relative;
+            background: white;
+            padding: 5px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .video-container img {
+            width: 100%;
+            border-radius: 8px;
+        }
+
+        .video-title {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 5px;
+            font-size: 14px;
+            border-radius: 5px;
+            text-align: center;
+            width: 90%;
+        }
+    </style>
 </head>
-<body class="bg-dark text-white">
-    <!-- Full-Width Video Banner -->
-    <div class="relative w-full h-[60vh] bg-black">
-        <iframe 
-            id="main-player"
-            class="absolute top-0 left-0 w-full h-full"
-            src="https://player.vimeo.com/video/123456789"
-            frameborder="0"
-            allow="autoplay; fullscreen"
-            allowfullscreen>
-        </iframe>
+<body>
 
-        <!-- Navigation Arrows -->
-        <button 
-            class="absolute top-1/2 left-4 transform -translate-y-1/2 bg-black/50 hover:bg-black text-white p-3 rounded-full"
-            onclick="prevVideo()">
-            &#9664;
-        </button>
-        <button 
-            class="absolute top-1/2 right-4 transform -translate-y-1/2 bg-black/50 hover:bg-black text-white p-3 rounded-full"
-            onclick="nextVideo()">
-            &#9654;
-        </button>
-    </div>
-
-    <!-- Video Grid -->
-    <div class="container mx-auto px-4 py-6">
-        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-            <script>
-                const vimeoIds = [
-                    "123456789", "234567890", "345678901", "456789012", "567890123",
-                    "678901234", "789012345", "890123456", "901234567", "123456780",
-                    "234567801", "345678912", "456789023", "567890134", "678901245",
-                    "789012356", "890123467", "901234578", "123456789", "234567890",
-                    "345678901", "456789012", "567890123", "678901234", "789012345",
-                    "890123456", "901234567", "123456780", "234567801", "345678912",
-                    "456789023", "567890134", "678901245", "789012356", "890123467"
-                ];
-                let currentIndex = 0;
-
-                function updatePlayer(videoId, index) {
-                    document.getElementById('main-player').src = `https://player.vimeo.com/video/${videoId}?autoplay=1`;
-                    currentIndex = index;
-                }
-
-                function prevVideo() {
-                    currentIndex = (currentIndex - 1 + vimeoIds.length) % vimeoIds.length;
-                    updatePlayer(vimeoIds[currentIndex], currentIndex);
-                }
-
-                function nextVideo() {
-                    currentIndex = (currentIndex + 1) % vimeoIds.length;
-                    updatePlayer(vimeoIds[currentIndex], currentIndex);
-                }
-
-                vimeoIds.forEach((id, index) => {
-                    document.write(`
-                        <div 
-                            class="cursor-pointer border border-gray-700 rounded-lg overflow-hidden shadow-md transform transition duration-300 hover:scale-105 hover:border-primary"
-                            onclick="updatePlayer('${id}', ${index})"
-                        >
-                            <img 
-                                src="https://vumbnail.com/${id}.jpg" 
-                                alt="Video Thumbnail" 
-                                class="w-full h-auto"
-                            />
-                        </div>
-                    `);
-                });
-
-                // Enable keyboard navigation
-                document.addEventListener("keydown", (event) => {
-                    if (event.key === "ArrowLeft") prevVideo();
-                    if (event.key === "ArrowRight") nextVideo();
-                });
-            </script>
+    <h1>Vimeo Video Gallery</h1>
+    <div class="gallery">
+        <!-- 35 Video Containers -->
+        <div class="video-container" data-vimeo-id="76979871">
+            <img src="" alt="Video Thumbnail">
+            <div class="video-title">Loading...</div>
         </div>
+        <div class="video-container" data-vimeo-id="357274207">
+            <img src="" alt="Video Thumbnail">
+            <div class="video-title">Loading...</div>
+        </div>
+        <div class="video-container" data-vimeo-id="148751763">
+            <img src="" alt="Video Thumbnail">
+            <div class="video-title">Loading...</div>
+        </div>
+        <div class="video-container" data-vimeo-id="289743567">
+            <img src="" alt="Video Thumbnail">
+            <div class="video-title">Loading...</div>
+        </div>
+        <div class="video-container" data-vimeo-id="315156180">
+            <img src="" alt="Video Thumbnail">
+            <div class="video-title">Loading...</div>
+        </div>
+        <div class="video-container" data-vimeo-id="396182328">
+            <img src="" alt="Video Thumbnail">
+            <div class="video-title">Loading...</div>
+        </div>
+        <div class="video-container" data-vimeo-id="410474261">
+            <img src="" alt="Video Thumbnail">
+            <div class="video-title">Loading...</div>
+        </div>
+        <div class="video-container" data-vimeo-id="425147680">
+            <img src="" alt="Video Thumbnail">
+            <div class="video-title">Loading...</div>
+        </div>
+        <div class="video-container" data-vimeo-id="437816388">
+            <img src="" alt="Video Thumbnail">
+            <div class="video-title">Loading...</div>
+        </div>
+        <div class="video-container" data-vimeo-id="445047837">
+            <img src="" alt="Video Thumbnail">
+            <div class="video-title">Loading...</div>
+        </div>
+        <div class="video-container" data-vimeo-id="451872882">
+            <img src="" alt="Video Thumbnail">
+            <div class="video-title">Loading...</div>
+        </div>
+        <!-- Add 24 more video containers with correct Vimeo IDs -->
     </div>
+
+    <script>
+        async function fetchVimeoData(videoContainer) {
+            const videoId = videoContainer.getAttribute("data-vimeo-id");
+            const apiUrl = `https://vimeo.com/api/v2/video/${videoId}.json`;
+
+            try {
+                const response = await fetch(apiUrl);
+                const data = await response.json();
+                const videoData = data[0];
+
+                // Set title and thumbnail
+                videoContainer.querySelector(".video-title").innerText = videoData.title;
+                videoContainer.querySelector("img").src = videoData.thumbnail_large;
+            } catch (error) {
+                console.error("Error fetching Vimeo data:", error);
+                videoContainer.querySelector(".video-title").innerText = "Title not found";
+            }
+        }
+
+        // Fetch data for all video containers
+        document.querySelectorAll(".video-container").forEach(fetchVimeoData);
+    </script>
+
 </body>
 </html>
