@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vimeo Video Gallery</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#7d3cff",
+                        dark: "#1a1a1a",
+                    }
+                }
+            }
+        };
+    </script>
+</head>
+<body class="bg-dark text-white">
+    <!-- Full-Width Video Banner -->
+    <div class="relative w-full h-[60vh] bg-black">
+        <iframe 
+            id="main-player"
+            class="absolute top-0 left-0 w-full h-full"
+            src="https://player.vimeo.com/video/123456789"
+            frameborder="0"
+            allow="autoplay; fullscreen"
+            allowfullscreen>
+        </iframe>
+
+        <!-- Navigation Arrows -->
+        <button 
+            class="absolute top-1/2 left-4 transform -translate-y-1/2 bg-black/50 hover:bg-black text-white p-3 rounded-full"
+            onclick="prevVideo()">
+            &#9664;
+        </button>
+        <button 
+            class="absolute top-1/2 right-4 transform -translate-y-1/2 bg-black/50 hover:bg-black text-white p-3 rounded-full"
+            onclick="nextVideo()">
+            &#9654;
+        </button>
+    </div>
+
+    <!-- Video Grid -->
+    <div class="container mx-auto px-4 py-6">
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+            <script>
+                const vimeoIds = [
+                    "123456789", "234567890", "345678901", "456789012", "567890123",
+                    "678901234", "789012345", "890123456", "901234567", "123456780",
+                    "234567801", "345678912", "456789023", "567890134", "678901245",
+                    "789012356", "890123467", "901234578", "123456789", "234567890",
+                    "345678901", "456789012", "567890123", "678901234", "789012345",
+                    "890123456", "901234567", "123456780", "234567801", "345678912",
+                    "456789023", "567890134", "678901245", "789012356", "890123467"
+                ];
+                let currentIndex = 0;
+
+                function updatePlayer(videoId, index) {
+                    document.getElementById('main-player').src = `https://player.vimeo.com/video/${videoId}?autoplay=1`;
+                    currentIndex = index;
+                }
+
+                function prevVideo() {
+                    currentIndex = (currentIndex - 1 + vimeoIds.length) % vimeoIds.length;
+                    updatePlayer(vimeoIds[currentIndex], currentIndex);
+                }
+
+                function nextVideo() {
+                    currentIndex = (currentIndex + 1) % vimeoIds.length;
+                    updatePlayer(vimeoIds[currentIndex], currentIndex);
+                }
+
+                vimeoIds.forEach((id, index) => {
+                    document.write(`
+                        <div 
+                            class="cursor-pointer border border-gray-700 rounded-lg overflow-hidden shadow-md transform transition duration-300 hover:scale-105 hover:border-primary"
+                            onclick="updatePlayer('${id}', ${index})"
+                        >
+                            <img 
+                                src="https://vumbnail.com/${id}.jpg" 
+                                alt="Video Thumbnail" 
+                                class="w-full h-auto"
+                            />
+                        </div>
+                    `);
+                });
+
+                // Enable keyboard navigation
+                document.addEventListener("keydown", (event) => {
+                    if (event.key === "ArrowLeft") prevVideo();
+                    if (event.key === "ArrowRight") nextVideo();
+                });
+            </script>
+        </div>
+    </div>
+</body>
+</html>
