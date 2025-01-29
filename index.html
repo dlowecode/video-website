@@ -5,105 +5,118 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vimeo Video Gallery</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        .video-title {
-            position: absolute;
-            bottom: 10px;
-            left: 10px;
-            font-size: 18px;
-            color: white;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-        }
-        .video-container {
-            position: relative;
-            width: 100%;
-            height: 0;
-            padding-bottom: 56.25%;
-            margin-bottom: 1rem;
-        }
-        .video-container iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-        }
-    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#7d3cff",
+                        dark: "#1a1a1a",
+                    }
+                }
+            }
+        };
+    </script>
 </head>
-<body class="bg-gray-900 text-white">
+<body class="bg-dark text-white">
+    <!-- Full-Width Video Banner -->
+    <div class="relative w-full h-[60vh] bg-black">
+        <iframe 
+            id="main-player"
+            class="absolute top-0 left-0 w-full h-full"
+            src="https://player.vimeo.com/video/123456789"
+            frameborder="0"
+            allow="autoplay; fullscreen"
+            allowfullscreen>
+        </iframe>
 
-    <!-- Full-Width Video Player -->
-    <div class="relative mb-8">
-        <div id="main-video" class="video-container">
-            <!-- Default video embedded here for demo -->
-            <iframe src="https://player.vimeo.com/video/123456789" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe>
-        </div>
+        <!-- Navigation Arrows -->
+        <button 
+            class="absolute top-1/2 left-4 transform -translate-y-1/2 bg-black/50 hover:bg-black text-white p-3 rounded-full"
+            onclick="prevVideo()">
+            &#9664;
+        </button>
+        <button 
+            class="absolute top-1/2 right-4 transform -translate-y-1/2 bg-black/50 hover:bg-black text-white p-3 rounded-full"
+            onclick="nextVideo()">
+            &#9654;
+        </button>
     </div>
 
     <!-- Video Grid -->
-    <div class="grid grid-cols-3 gap-4 mx-4">
-        <!-- Video Thumbnails (dynamically populated) -->
-        <div class="video-grid" id="video-grid"></div>
+    <div class="container mx-auto px-4 py-6">
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+            <script>
+                const vimeoIds = [
+                    "123456789", "234567890", "345678901", "456789012", "567890123",
+                    "678901234", "789012345", "890123456", "901234567", "123456780",
+                    "234567801", "345678912", "456789023", "567890134", "678901245",
+                    "789012356", "890123467", "901234578", "123456789", "234567890",
+                    "345678901", "456789012", "567890123", "678901234", "789012345",
+                    "890123456", "901234567", "123456780", "234567801", "345678912",
+                    "456789023", "567890134", "678901245", "789012356", "890123467"
+                ];
+
+                // Define titles here
+                const videoTitles = [
+                    "First Video Title", "Second Video Title", "How to Code", "Web Design 101", "Advanced CSS",
+                    "React Basics", "Learning JavaScript", "Understanding HTML", "CSS Grid Explained", "Web Accessibility",
+                    "JavaScript DOM", "Vue.js Overview", "Web Development Trends", "Backend Basics", "Frontend Frameworks",
+                    "UI/UX Principles", "Progressive Web Apps", "API Development", "Version Control Basics", "Async Programming",
+                    "Node.js Introduction", "Responsive Design", "UX Testing", "JavaScript Frameworks", "Tech Trends 2025",
+                    "Full Stack Web Dev", "Databases for Developers", "Next.js in Action", "Python for Web Development", "Modern Web Apps",
+                    "Design Systems", "Agile Methodology", "Testing Frameworks", "Code Review Process", "Cloud Services for Devs"
+                ];
+
+                let currentIndex = 0;
+
+                function updatePlayer(videoId, index) {
+                    document.getElementById('main-player').src = `https://player.vimeo.com/video/${videoId}?autoplay=1`;
+                    currentIndex = index;
+                }
+
+                function prevVideo() {
+                    currentIndex = (currentIndex - 1 + vimeoIds.length) % vimeoIds.length;
+                    updatePlayer(vimeoIds[currentIndex], currentIndex);
+                }
+
+                function nextVideo() {
+                    currentIndex = (currentIndex + 1) % vimeoIds.length;
+                    updatePlayer(vimeoIds[currentIndex], currentIndex);
+                }
+
+                vimeoIds.forEach((id, index) => {
+                    // Create a container for the video item
+                    const videoItem = document.createElement('div');
+                    videoItem.classList.add('cursor-pointer', 'border', 'border-gray-700', 'rounded-lg', 'overflow-hidden', 'shadow-md', 'transform', 'transition', 'duration-300', 'hover:scale-105', 'hover:border-primary');
+                    videoItem.onclick = () => updatePlayer(id, index);
+
+                    // Create the thumbnail image
+                    const img = document.createElement('img');
+                    img.src = `https://vumbnail.com/${id}.jpg`;
+                    img.alt = 'Video Thumbnail';
+                    img.classList.add('w-full', 'h-auto');
+                    videoItem.appendChild(img);
+
+                    // Create the title overlay
+                    const titleOverlay = document.createElement('div');
+                    titleOverlay.classList.add('absolute', 'bottom-0', 'left-0', 'w-full', 'bg-black/50', 'text-white', 'p-2', 'text-center', 'text-sm');
+                    titleOverlay.textContent = videoTitles[index];
+
+                    // Append the title overlay to the video item
+                    videoItem.appendChild(titleOverlay);
+
+                    // Append the video item to the grid
+                    document.querySelector('.grid').appendChild(videoItem);
+                });
+
+                // Enable keyboard navigation for left and right arrows
+                document.addEventListener("keydown", (event) => {
+                    if (event.key === "ArrowLeft") prevVideo();
+                    if (event.key === "ArrowRight") nextVideo();
+                });
+            </script>
+        </div>
     </div>
-
-    <script>
-        const videoIds = [
-            '123456789', '987654321', '234567890', // Replace these with your actual Vimeo video IDs
-            '345678901', '456789012', '567890123', // Add more video IDs as needed
-            '678901234', '789012345', '890123456'
-        ];
-
-        const videoGridElement = document.getElementById('video-grid');
-        const mainVideoElement = document.getElementById('main-video');
-
-        // Function to fetch video details using oEmbed
-        const fetchVideoDetails = async (videoId) => {
-            const response = await fetch(`https://vimeo.com/api/oembed.json?url=https://vimeo.com/${videoId}`);
-            if (!response.ok) {
-                console.error('Error fetching title');
-                return { title: 'Error fetching title', thumbnail: '' };
-            }
-            return await response.json();
-        };
-
-        // Load video thumbnails and titles
-        const loadVideoGrid = async () => {
-            for (const videoId of videoIds) {
-                const data = await fetchVideoDetails(videoId);
-                
-                // Create a grid item for each video
-                const videoItem = document.createElement('div');
-                videoItem.className = 'relative';
-
-                // Video thumbnail and overlay
-                const videoThumbnail = document.createElement('img');
-                videoThumbnail.src = `https://vumbnail.com/${videoId}.jpg`;
-                videoThumbnail.alt = data.title;
-                videoThumbnail.className = 'w-full h-full object-cover rounded-lg cursor-pointer';
-
-                // Title overlay
-                const titleOverlay = document.createElement('div');
-                titleOverlay.className = 'video-title';
-                titleOverlay.textContent = data.title;
-
-                // Wrap the image and title
-                const videoWrapper = document.createElement('div');
-                videoWrapper.className = 'relative';
-                videoWrapper.appendChild(videoThumbnail);
-                videoWrapper.appendChild(titleOverlay);
-
-                // Add a click event to set the main player
-                videoWrapper.onclick = () => {
-                    mainVideoElement.innerHTML = `<iframe src="https://player.vimeo.com/video/${videoId}" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe>`;
-                };
-
-                // Append to the video grid
-                videoGridElement.appendChild(videoWrapper);
-            }
-        };
-
-        // Initialize video grid on page load
-        window.onload = loadVideoGrid;
-    </script>
 </body>
 </html>
