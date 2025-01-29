@@ -3,10 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vimeo Gallery</title>
+    <title>Vimeo Video Gallery</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
-        tailwind.config = { theme: { extend: { colors: { primary: "#7d3cff", dark: "#1a1a1a" }}}};
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#7d3cff",
+                        dark: "#1a1a1a",
+                    }
+                }
+            }
+        };
         document.addEventListener("DOMContentLoaded", () => {
             const vimeoIds = [
                 "1045001462", "1045001369", "1045001239", "1045001104", "1045000972", 
@@ -30,10 +39,16 @@
             };
 
             // Function to navigate to the previous video
-            const prevVideo = () => updatePlayer(vimeoIds[(currentIndex - 1 + vimeoIds.length) % vimeoIds.length], currentIndex - 1);
+            const prevVideo = () => {
+                currentIndex = (currentIndex - 1 + vimeoIds.length) % vimeoIds.length;
+                updatePlayer(vimeoIds[currentIndex], currentIndex);
+            };
             
             // Function to navigate to the next video
-            const nextVideo = () => updatePlayer(vimeoIds[(currentIndex + 1) % vimeoIds.length], currentIndex + 1);
+            const nextVideo = () => {
+                currentIndex = (currentIndex + 1) % vimeoIds.length;
+                updatePlayer(vimeoIds[currentIndex], currentIndex);
+            };
 
             // Format duration to minutes:seconds
             const formatDuration = (duration) => {
@@ -60,7 +75,7 @@
                     div.className = `cursor-pointer border border-gray-700 rounded-lg overflow-hidden transform transition duration-300 hover:scale-110 hover:border-primary relative ${currentIndex === idx ? 'border-primary' : ''}`;
                     div.onclick = () => updatePlayer(id, idx);
                     div.innerHTML = `
-                        <img src="https://vumbnail.com/${id}.jpg" class="w-full h-full object-cover" style="width: 140px; height: 140px;"/>
+                        <img src="https://vumbnail.com/${id}.jpg" class="w-full h-full object-cover" />
                         <div class="absolute bottom-0 left-0 w-full bg-black/50 text-white text-center text-sm p-2">${videoTitles[idx] || "Loading..."}</div>
                         <div class="absolute bottom-0 right-0 bg-black/50 text-white text-xs p-2">${videoDurations[idx] || "00:00"}</div>
                     `;
@@ -92,6 +107,10 @@
                 if (e.key === 'ArrowLeft') prevVideo(); 
                 if (e.key === 'ArrowRight') nextVideo(); 
             });
+
+            // Add event listeners to buttons
+            document.querySelector('#prev-button').addEventListener('click', prevVideo);
+            document.querySelector('#next-button').addEventListener('click', nextVideo);
         });
     </script>
 </head>
@@ -99,8 +118,8 @@
     <div class="relative w-full h-[60vh] bg-black video-player">
         <!-- Vimeo iframe will be dynamically loaded here -->
     </div>
-    <div class="absolute top-1/2 left-4 transform -translate-y-1/2 bg-black/50 hover:bg-black text-white p-3 rounded-full cursor-pointer" onclick="prevVideo()">&#9664;</div>
-    <div class="absolute top-1/2 right-4 transform -translate-y-1/2 bg-black/50 hover:bg-black text-white p-3 rounded-full cursor-pointer" onclick="nextVideo()">&#9654;</div>
+    <div id="prev-button" class="absolute top-1/2 left-4 transform -translate-y-1/2 bg-black/50 hover:bg-black text-white p-3 rounded-full cursor-pointer">&#9664;</div>
+    <div id="next-button" class="absolute top-1/2 right-4 transform -translate-y-1/2 bg-black/50 hover:bg-black text-white p-3 rounded-full cursor-pointer">&#9654;</div>
     <div class="container mx-auto px-4 py-6">
         <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6"></div>
     </div>
