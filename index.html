@@ -26,6 +26,7 @@
                 const player = document.querySelector('iframe');
                 player.src = `https://player.vimeo.com/video/${id}?autoplay=1`;
                 currentIndex = idx;
+                highlightActiveVideo();
             };
 
             // Function to navigate to the previous video
@@ -56,10 +57,10 @@
                 grid.innerHTML = '';  // Clear grid before adding new elements
                 vimeoIds.forEach((id, idx) => {
                     const div = document.createElement('div');
-                    div.className = 'cursor-pointer border border-gray-700 rounded-lg overflow-hidden transform transition duration-300 hover:scale-110 hover:border-primary relative';
+                    div.className = `cursor-pointer border border-gray-700 rounded-lg overflow-hidden transform transition duration-300 hover:scale-110 hover:border-primary relative ${currentIndex === idx ? 'border-primary' : ''}`;
                     div.onclick = () => updatePlayer(id, idx);
                     div.innerHTML = `
-                        <img src="https://vumbnail.com/${id}.jpg" class="w-full h-auto scale-125" />
+                        <img src="https://vumbnail.com/${id}.jpg" class="w-full h-full object-cover" style="width: 140px; height: 140px;"/>
                         <div class="absolute bottom-0 left-0 w-full bg-black/50 text-white text-center text-sm p-2">${videoTitles[idx] || "Loading..."}</div>
                         <div class="absolute bottom-0 right-0 bg-black/50 text-white text-xs p-2">${videoDurations[idx] || "00:00"}</div>
                     `;
@@ -73,6 +74,18 @@
 
             // Fetch all video data on page load
             vimeoIds.forEach((id, idx) => fetchVideoData(id, idx));
+
+            // Highlight active video in the grid
+            const highlightActiveVideo = () => {
+                const gridItems = document.querySelectorAll('.grid div');
+                gridItems.forEach((item, idx) => {
+                    if (idx === currentIndex) {
+                        item.classList.add('border-primary');
+                    } else {
+                        item.classList.remove('border-primary');
+                    }
+                });
+            };
 
             // Listen for keyboard navigation (left and right arrows)
             document.addEventListener('keydown', e => { 
