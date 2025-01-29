@@ -56,10 +56,10 @@
                 grid.innerHTML = '';  // Clear grid before adding new elements
                 vimeoIds.forEach((id, idx) => {
                     const div = document.createElement('div');
-                    div.className = 'cursor-pointer border border-gray-700 rounded-lg overflow-hidden transform transition duration-300 hover:scale-105 hover:border-primary relative';
+                    div.className = 'cursor-pointer border border-gray-700 rounded-lg overflow-hidden transform transition duration-300 hover:scale-110 hover:border-primary relative';
                     div.onclick = () => updatePlayer(id, idx);
                     div.innerHTML = `
-                        <img src="https://vumbnail.com/${id}.jpg" class="w-full" />
+                        <img src="https://vumbnail.com/${id}.jpg" class="w-full h-auto scale-125" />
                         <div class="absolute bottom-0 left-0 w-full bg-black/50 text-white text-center text-sm p-2">${videoTitles[idx] || "Loading..."}</div>
                         <div class="absolute bottom-0 right-0 bg-black/50 text-white text-xs p-2">${videoDurations[idx] || "00:00"}</div>
                     `;
@@ -89,7 +89,7 @@
     <div class="absolute top-1/2 left-4 transform -translate-y-1/2 bg-black/50 hover:bg-black text-white p-3 rounded-full cursor-pointer" onclick="prevVideo()">&#9664;</div>
     <div class="absolute top-1/2 right-4 transform -translate-y-1/2 bg-black/50 hover:bg-black text-white p-3 rounded-full cursor-pointer" onclick="nextVideo()">&#9654;</div>
     <div class="container mx-auto px-4 py-6">
-        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4"></div>
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6"></div>
     </div>
 </body>
 </html>
